@@ -2,21 +2,21 @@
 
 Smart budget planner with income/expense tracking and visual charts.
 
-## Cara Pakai
+## How to Use
 
-**Langkah 1:** Buka file `index.html` di browser.
+**Step 1:** Open `index.html` in your browser.
 
-**Langkah 2:** Tutorial onboarding muncul pertama kali. Baca lalu klik **Get Started**.
+**Step 2:** An onboarding tutorial appears on first visit. Read it and click **Get Started**.
 
-**Langkah 3:** Ketik deskripsi di kolom Description, masukkan Amount.
+**Step 3:** Type a description and enter the amount.
 
-**Langkah 4:** Pilih tipe: **Income** atau **Expense**.
+**Step 4:** Select type: **Income** or **Expense**.
 
-**Langkah 5:** Pilih kategori: Food, Transport, Bills, Shopping, Entertainment, Other.
+**Step 5:** Choose a category: Food, Transport, Bills, Shopping, Entertainment, or Other.
 
-**Langkah 6:** Klik **Add**. Transaksi masuk ke daftar dan summary ter-update otomatis.
+**Step 6:** Click **Add**. The transaction is added and summary updates automatically.
 
-**Langkah 7:** Liat kartu **Income**, **Expenses**, dan **Savings** di atas.
+**Step 7:** View **Income**, **Expenses**, and **Savings** cards at the top.
 
 ## Features
 - Income & expense tracking

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Budget Planner</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#0f0f23;color:#e0e0e0;min-height:100vh}
+/* Onboarding overlay */
+.onboard{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;display:flex;justify-content:center;align-items:center}
+.onboard.hide{display:none}
+.onboard-card{background:#1a1a3e;border-radius:20px;padding:40px;max-width:500px;width:90%;text-align:center}
+.onboard-card h2{color:#6c5ce7;font-size:28px;margin-bottom:8px}
+.onboard-card .steps{display:flex;flex-direction:column;gap:20px;margin:25px 0;text-align:left}
+.onboard-card .step{display:flex;gap:15px;align-items:flex-start}
+.onboard-card .step .num{width:36px;height:36px;border-radius:50%;background:#6c5ce7;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.onboard-card .step .text h4{font-size:15px;color:#fff;margin-bottom:3px}
+.onboard-card .step .text p{font-size:13px;color:#888;line-height:1.5}
+.onboard-card .start-btn{padding:14px 40px;border:none;border-radius:10px;background:#6c5ce7;color:#fff;font-size:16px;font-weight:600;cursor:pointer;margin-top:10px}
+.onboard-card .start-btn:hover{background:#5b4cdb}
+.onboard-card .skip{color:#555;font-size:12px;cursor:pointer;margin-top:15px;display:inline-block}
+.onboard-card .skip:hover{color:#888}
+/* Main app */
+.app{display:none;max-width:800px;margin:0 auto;padding:30px 20px}
+.app.show{display:block}
+h1{text-align:center;margin-bottom:5px;color:#6c5ce7}
+.sub{text-align:center;color:#666;margin-bottom:25px;font-size:14px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}
+.card{background:#1a1a3e;border-radius:14px;padding:20px;text-align:center}
+.card h3{font-size:13px;color:#666;margin-bottom:5px}
+.card .val{font-size:26px;font-weight:700}
+.card.inc .val{color:#00b894}
+.card.exp .val{color:#e17055}
+.card.sav .val{color:#6c5ce7}
+.form{background:#1a1a3e;border-radius:14px;padding:20px;margin-bottom:20px;display:flex;gap:8px;flex-wrap:wrap}
+.form input,.form select{padding:11px;border:1px solid #333;border-radius:8px;background:#0f0f23;color:#fff;font-size:13px;flex:1;min-width:100px}
+.form input:focus{outline:none;border-color:#6c5ce7}
+.form button{padding:11px 20px;border:none;border-radius:8px;background:#6c5ce7;color:#fff;font-weight:600;cursor:pointer}
+.list{background:#1a1a3e;border-radius:14px;padding:15px}
+.item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #0f0f23}
+.item:last-child{border:none}
+.item .l{display:flex;align-items:center;gap:10px}
+.item .ico{font-size:20px}
+.item .name{font-size:14px}.item .dt{font-size:11px;color:#666}
+.item .amt{font-weight:700;font-size:15px}
+.item .amt.neg{color:#e17055}.item .amt.pos{color:#00b894}
+.item .del{cursor:pointer;color:#333;font-size:16px}.item .del:hover{color:#e17055}
+.empty{text-align:center;color:#555;padding:30px;font-size:14px}
+</style></head><body>
+<!-- ONBOARDING -->
+<div class="onboard" id="onboard">
+<div class="onboard-card">
+<h2>Budget Planner</h2>
+<p style="color:#888;margin-bottom:5px">Take control of your finances in 3 simple steps</p>
+<div class="steps">
+<div class="step"><div class="num">1</div><div class="text"><h4>Add Your Income</h4><p>Start by adding your salary, freelance earnings, or any money coming in. This sets your monthly budget baseline.</p></div></div>
+<div class="step"><div class="num">2</div><div class="text"><h4>Track Expenses</h4><p>Log every purchase - food, transport, bills, shopping. Categorize them to see where your money goes.</p></div></div>
+<div class="step"><div class="num">3</div><div class="text"><h4>Review & Save</h4><p>Check your balance daily. Aim to save at least 20% of your income. Watch your savings grow!</p></div></div>
+</div>
+<button class="start-btn" onclick="startApp()">Get Started</button>
+<div class="skip" onclick="startApp()">Skip tutorial</div>
+</div></div>
+<!-- APP -->
+<div class="app" id="app">
+<h1>Budget Planner</h1>
+<p class="sub">Track income, expenses, and savings</p>
+<div class="summary">
+<div class="card inc"><h3>Income</h3><div class="val" id="inc">$0</div></div>
+<div class="card exp"><h3>Expenses</h3><div class="val" id="exp">$0</div></div>
+<div class="card sav"><h3>Savings</h3><div class="val" id="sav">$0</div></div>
+</div>
+<div class="form">
+<input type="text" id="desc" placeholder="Description">
+<input type="number" id="amt" placeholder="Amount">
+<select id="type"><option value="expense">Expense</option><option value="income">Income</option></select>
+<select id="cat"><option>Food</option><option>Transport</option><option>Bills</option><option>Shopping</option><option>Entertainment</option><option>Other</option></select>
+<button onclick="add()">Add</button>
+</div>
+<div class="list" id="list"><div class="empty">No transactions yet. Add your first income above!</div></div>
+</div>
+<script>
+function startApp(){document.getElementById('onboard').classList.add('hide');document.getElementById('app').classList.add('show');localStorage.setItem('bp_seen','1')}
+if(localStorage.getItem('bp_seen'))startApp();
+var items=JSON.parse(localStorage.getItem('bp_items')||'[]');
+function render(){
+var inc=items.filter(function(i){return i.type==='income'}).reduce(function(s,i){return s+i.amount},0);
+var exp=items.filter(function(i){return i.type==='expense'}).reduce(function(s,i){return s+i.amount},0);
+document.getElementById('inc').textContent='$'+inc.toFixed(2);
+document.getElementById('exp').textContent='$'+exp.toFixed(2);
+document.getElementById('sav').textContent='$'+(inc-exp).toFixed(2);
+var icons={Food:'\ud83c\udf54',Transport:'\ud83d\ude97',Bills:'\ud83d\udcb3',Shopping:'\ud83d\uded2',Entertainment:'\ud83c\udfae',Other:'\ud83d\udccc'};
+document.getElementById('list').innerHTML=items.length?items.map(function(it,idx){
+return '<div class="item"><div class="l"><span class="ico">'+(icons[it.cat]||'')+'</span><div><div class="name">'+it.desc+'</div><div class="dt">'+it.cat+' \u00b7 '+it.date+'</div></div></div><span class="amt '+(it.type==='expense'?'neg':'pos')+'">'+(it.type==='expense'?'-':'+')+'$'+it.amount.toFixed(2)+'</span><span class="del" onclick="del('+idx+')">&times;</span></div>';
+}).join(''):'<div class="empty">No transactions yet. Add your first income above!</div>';
+localStorage.setItem('bp_items',JSON.stringify(items));
+}
+function add(){
+var desc=document.getElementById('desc').value;var amt=parseFloat(document.getElementById('amt').value);
+var type=document.getElementById('type').value;var cat=document.getElementById('cat').value;
+if(!desc||isNaN(amt))return;
+items.unshift({desc:desc,amount:amt,type:type,cat:cat,date:new Date().toLocaleDateString()});
+document.getElementById('desc').value='';document.getElementById('amt').value='';render();
+}
+function del(i){items.splice(i,1);render()}
+render();
+</script></body></html>
